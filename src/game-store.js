@@ -63,7 +63,7 @@ class GameStore {
     onRequestTrumpf(pl) {
         let response = {};
         response.type = 'CHOOSE_TRUMPF';
-        response.data = this.strategy.requestTrumpf(this.myCards);
+        response.data = this.strategy.requestTrumpf(this.myCards, pl);
         this.dispatcher.emit('sendResponse', response);
     }
 
