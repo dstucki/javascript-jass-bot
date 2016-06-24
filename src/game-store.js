@@ -82,7 +82,7 @@ class GameStore {
         response.type = 'CHOOSE_CARD';
         response.data = cardToPlay;
 
-        this.myCards.splice(this.myCards.indexOf(cardToPlay), 1);
+        this.myCards.splice(this.myCards.findIndex(card => card.color === cardToPlay.color && card.number === cardToPlay.number), 1);
 
         this.dispatcher.emit('sendResponse', response);
     }
