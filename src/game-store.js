@@ -41,10 +41,17 @@ class GameStore {
     onRequestSessionChoise(pl) {
         let response = {};
         response.type = 'CHOOSE_SESSION';
-        response.data = {};
-        response.data.sessionChoice = 'AUTOJOIN';
-        response.data.sessionName = 'should not matter';
-        response.data.sessionType = 'TOURNAMENT';
+        let defaultResponse = {
+            sessionChoice: 'AUTOJOIN',
+            sessionName: 'should not matter',
+            sessionType: 'TOURNAMENT'
+        };
+
+        let sessionChoice = {};
+        if(typeof this.strategy.requestSessionChoice === 'function'){
+            sessionChoice = this.strategy.onRequestSessionChoise(pl);
+        }
+        response.data = Object.assign({}, defaultResponse, sessionChoice);
         this.dispatcher.emit('sendResponse', response);
     }
 
@@ -74,7 +81,7 @@ class GameStore {
 
     onRequestCard(pl) {
         this.gameState.lastPlayerPosition = pl.length;
-        
+
         // fallback. After 5 retries (e.g. bot sends always same card), choose card by our own
         let cardToPlay = (this.rejectCounter && this.rejectCounter >= 5) ? this.playCardFallback(pl) : this.strategy.playCard(this.myCards, pl, this.gameState);
 
@@ -127,11 +134,11 @@ class GameStore {
     onBroadcastWinnerTeam(pl) {
         if (this.debug) console.log('all games finished', pl);
     }
-    
+
     onBroadcastTournamentRankingTable(pl) {
         // do nothing right now
     }
-    
+
     // TODO: onBroadcastTournamentFinished: this.dispatcher.emit('closeConnection');
 
     onBadMessage(pl) {
