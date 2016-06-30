@@ -49,7 +49,7 @@ class GameStore {
 
         let sessionChoice = {};
         if(typeof this.strategy.requestSessionChoice === 'function'){
-            sessionChoice = this.strategy.onRequestSessionChoise(pl);
+            sessionChoice = this.strategy.requestSessionChoice(pl);
         }
         response.data = Object.assign({}, defaultResponse, sessionChoice);
         this.dispatcher.emit('sendResponse', response);
