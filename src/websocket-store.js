@@ -16,8 +16,8 @@ class WebSocketStore {
         this.debug = pl;
     }
 
-    onConnectJassServer(pl) {
-        this.webSocket = new WebSocket(`ws://${pl}`);
+    onConnectJassServer(connectionUrl) {
+        this.webSocket = new WebSocket(connectionUrl);
         this.webSocket.onmessage = event => {
             if (this.debug) console.log('WS receiving', event.data);
             let message = JSON.parse(event.data);
@@ -30,7 +30,7 @@ class WebSocketStore {
         if (this.debug) console.log('WS sending', content);
         this.webSocket.send(content);
     }
-    
+
     onCloseConnection(pl) {
         this.webSocket.close();
     }
